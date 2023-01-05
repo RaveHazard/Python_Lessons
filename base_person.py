@@ -23,16 +23,6 @@ class Person():
         self.weight = kg
 
 
-
-man = Person("Vasya", 30, 180)
-man.description_person()
-man.get_weight()
-man.weight = 222
-man.get_weight()
-man.update_weight(12)
-man.get_weight()
-
-
 class Warrior(Person):
     """create class Warrior"""
 
@@ -48,14 +38,15 @@ class Warrior(Person):
     def description_person(self):
         """Переопределение метода родителя"""
         description = self.name + ", ему " + str(self.age) + " лет, а его ярость " + str(self.rage)
-        #print(description)
+        # print(description)
         return description
+
 
 warrior = Warrior('Conan', 77, 200)
 warrior.update_weight(120)
 warrior.height = 777
-warrior.description_person()
-man.description_person()
-warrior.get_rage()
-check_warrior_description = warrior.description_person()
-print("Новый перс = " + check_warrior_description)
+
+# man = Person("Vasya", 30, 180)
+# man.description_person()
+# man.update_weight(111)
+# man.get_weight()
