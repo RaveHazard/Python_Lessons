@@ -68,7 +68,7 @@ class GoogleMaps_Req():
             place_id_list = pl.read().split()
             for place_id in place_id_list:
                 # идем по списку всех сохраненных локаций
-                if place_id_list.index(place_id) % 2 == 0 and place_id_list.index(place_id) != 0:
+                if place_id_list.index(place_id) % 2 != 0 and place_id_list.index(place_id) != 0:
                     # Выбираем все четные записи и отправляем запрос
                     delete_json = {
                         "place_id":place_id
@@ -86,17 +86,30 @@ class GoogleMaps_Req():
                     elif delete_req.status_code == 404:
                         print("Delete operation failed, looks like the data doesn't exists☹")
 
-    def get_chek_actual_locations(self):
 
-
-
-
-
-
-
-
+    def get_check_actual_locations(self):
+       """Проверка созданных решений """
+       with open('place_id_list.txt', 'r') as pl:
+            place_id_list = pl.read().split()
+            for place_id in place_id_list:
+                check_req = requests.get(self.base_url + self.get_resource + self.key + '&place_id=' + place_id )
+                check_req_json = check_req.json()
+                if check_req.status_code == 200:
+                    # Проверим, если ответ  200  - значит локация не удалена.
+                    print(f"Your location number {place_id_list.index(place_id)+1} in place_id_list.txt"
+                          f" save in service\n¯\_(ツ)_/¯ ¯\_(ツ)_/¯ ¯\_(ツ)_/¯ ¯\_(ツ)_/¯")
+                    with open('update_place_id_list.txt', 'a') as update_list:
+                        add_place_id = update_list.write(f"{place_id}\n")
+                        print("Cheked location will be write in update_place_id_list.txt")
+                elif check_req.status_code == 404:
+                    # Если ответ 404 - значит локация была удалена, возвращаем ответ.
+                    print(f'Sorry, useless place_id number {place_id_list.index(place_id)+1} in place_id_list.txt'
+                          ' is incorrect, please create new location')
+                else:
+                    print("FILED EXCEPTION")
 
 check = GoogleMaps_Req()
 check.create_point()
 # check.get_created_point_info()
 check.delete_place_id()
+check.get_check_actual_locations()
